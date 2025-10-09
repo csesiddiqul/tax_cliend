@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { useUpdateTaxPayerTypeMutation } from "../../../../redux/api/taxpayerTypeApi";
+import { useUpdateTaxPayerTypeMutation } from "redux/api/taxPayerTypeApi";
 
 interface EditProps {
     show: boolean;

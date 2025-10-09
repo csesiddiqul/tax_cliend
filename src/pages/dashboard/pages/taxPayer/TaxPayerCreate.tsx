@@ -314,6 +314,7 @@ const TaxPayerCreate: React.FC<CreateProps> = ({ show, handleClose }) => {
                   <Col md={6} className="mb-3">
                     <Form.Label htmlFor="BankNo">ব্যাংক নাম</Form.Label>
                     <BankNoSelect
+                    
                       setFieldValue={(field, value) => formik.setFieldValue(field, value)}
                     />
                     {formik.errors.BankNo && formik.touched.BankNo && (
@@ -490,8 +491,7 @@ const TaxPayerCreate: React.FC<CreateProps> = ({ show, handleClose }) => {
               >
                 Search
               </Button>
-              <Button className="text-white" variant="warning">Edit</Button>
-
+             
               <Button
                 variant="success"
                 type="submit"

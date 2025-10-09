@@ -12,7 +12,7 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 
-import { useGetTaxPayerTypesQuery, useDeleteTaxPayerTypeMutation } from "../../../../redux/api/taxpayerTypeApi";
+import { useGetTaxPayerTypesQuery, useDeleteTaxPayerTypeMutation } from "../../../../redux/api/taxPayerTypeApi";
 import Create from "./TaxPayerCreate";
 import Edit from "./Edit";
 import Swal from "sweetalert2";

@@ -19,7 +19,6 @@ import TblPropTypePage from "pages/dashboard/pages/tblPropTypes/tblPropTypePage"
 import TblPropUseIdPage from "pages/dashboard/pages/tblPropUseIds/TblPropUseIdPage";
 import TaxPayerTypesPage from "pages/dashboard/pages/taxPayerTypes/TaxPayerTypesPage";
 import TaxRatesPage from "pages/dashboard/pages/taxRates/TaxRatesPage";
-import CrudPage from "pages/dashboard/pages/crud/CrudPage";
 import TaxPayer from "pages/dashboard/pages/taxPayer/TaxPayerSearch";
 import TaxPayerCreate from "pages/dashboard/pages/taxPayer/TaxPayerCreate";
 
@@ -87,20 +86,7 @@ const App = () => {
         }
         ,
 
-        {
-          id: "crud",
-          path: "/cruds",
-          children: [
-            {
-              path: "index",
-              element: <ProtectedRoute
-                element={<CrudPage />}
-                requiredPermissions={['dashboard']}
-              />
-            },
 
-          ],
-        },
 
         {
           id: "taxPayerSearch",

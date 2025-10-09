@@ -5,7 +5,7 @@ import { Container } from "react-bootstrap";
 import { PageHeading } from "widgets";
 
 // import sub components
-import Addinfo from "sub-components/add-info/addinfo";
+import Addinfo from "sub-components/add-info/Addinfo";
 
 const Addinfos = () => {
   return (

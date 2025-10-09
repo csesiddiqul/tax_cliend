@@ -1,8 +1,6 @@
 //import node module libraries
 import { Outlet } from "react-router";
 import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-
 const AuthenticationLayout = () => {
   return (
     <section className="bg-light">

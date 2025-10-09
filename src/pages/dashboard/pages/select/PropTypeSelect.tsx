@@ -1,35 +1,50 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Select from 'react-select';
-import { useGetTblPropTypesQuery } from "../../../../redux/api/tblPropTypeApi";
+import {
+    useGetTblPropTypesQuery,
+    useGetTblPropTypeByIdQuery
+} from "../../../../redux/api/tblPropTypeApi";
 
 interface PropTypeOption {
-    value: number;
+    value: any;
     label: string;
 }
 
 interface PropType {
-    PropType_info: any;
+    PropType_info?: any;
     PropTypeID: number;
-    ClientNo: string;
+    ClientNo?: string;
     PropertyType: string;
 }
 
 interface PropTypeSelectProps {
+    value?: any; // ✅ edit form বা পুরনো মান
     setFieldValue: (field: string, value: any) => void;
+    disabled?: boolean;
 }
 
-const PropTypeSelect: React.FC<PropTypeSelectProps> = ({ setFieldValue }) => {
+
+const PropTypeSelect: React.FC<PropTypeSelectProps> = ({ value, setFieldValue, disabled }) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
-    const [PropTypes, setPropTypes] = useState<PropType[]>([]);
+    const [propTypes, setPropTypes] = useState<PropType[]>([]);
+    const [selectedOption, setSelectedOption] = useState<PropTypeOption | null>(null);
 
+
+
+    // ✅ Paginated prop types list
     const { data, isFetching } = useGetTblPropTypesQuery({
-        perPage: 4,
+        perPage: 8,
         page,
         search
     });
 
-    // Update PropTypes when API response changes
+    // ✅ Old value fetch (for edit)
+    const { data: propTypeByIdData, isFetching: isFetchingById } = useGetTblPropTypeByIdQuery(value ?? 0, {
+        skip: !value
+    });
+
+    // ✅ Update propTypes list
     useEffect(() => {
         if (!isFetching && data?.data) {
             const fetched = data.data as unknown as PropType[];
@@ -39,42 +54,69 @@ const PropTypeSelect: React.FC<PropTypeSelectProps> = ({ setFieldValue }) => {
         }
     }, [data?.data, isFetching, page, search]);
 
-    // Input change handler (debounce optional)
+    // ✅ Set old value if exists
+    useEffect(() => {
+        if (value) {
+            const found = propTypes.find(p => p.PropTypeID === value);
+            if (found) {
+                setSelectedOption({ value: found.PropTypeID, label: found.PropertyType });
+            } else if (!isFetchingById && propTypeByIdData?.data) {
+                setSelectedOption({
+                    value: propTypeByIdData.data.PropTypeID,
+                    label: propTypeByIdData.data.PropertyType,
+                });
+                // Merge into list
+                setPropTypes(prev => [
+                    ...prev,
+                    {
+                        PropTypeID: propTypeByIdData.data.PropTypeID,
+                        PropertyType: propTypeByIdData.data.PropertyType,
+                    },
+                ]);
+            }
+        }
+    }, [value, propTypes, propTypeByIdData, isFetchingById]);
+
+    // ✅ Handle search input
     const handleInputChange = useCallback((inputValue: string) => {
         setSearch(inputValue);
         setPage(1);
     }, []);
 
-    // Load more when scrolling
+    // ✅ Infinite scroll
     const loadMoreOptions = useCallback(() => {
         if (!isFetching && (data?.data?.length ?? 0) > 0) {
             setPage(prev => prev + 1);
         }
     }, [isFetching, data?.data]);
 
-    // Map API data to react-select options
-    const PropTypeOptions: PropTypeOption[] = useMemo(
-        () =>
-            PropTypes.map(tp => ({
-                value: tp.PropTypeID,
-                label: `${tp.PropertyType}`,
-            })),
-        [PropTypes]
+    // ✅ Prepare select options
+    const propTypeOptions: PropTypeOption[] = useMemo(
+        () => propTypes.map(tp => ({
+            value: tp.PropTypeID,
+            label: tp.PropertyType,
+        })),
+        [propTypes]
     );
 
     return (
         <Select<PropTypeOption>
             id="PropTypeID"
             name="PropTypeID"
-            options={PropTypeOptions}
-            onChange={opt => setFieldValue("PropTypeID", opt?.value ?? '')}
+            options={propTypeOptions}
+            value={selectedOption}
+            onChange={opt => {
+                setSelectedOption(opt ?? null);
+                setFieldValue("PropTypeID", opt?.value ?? '');
+            }}
             onInputChange={handleInputChange}
-            isLoading={isFetching}
+            isLoading={isFetching || isFetchingById}
             onMenuScrollToBottom={loadMoreOptions}
             placeholder="Select"
             getOptionLabel={opt => opt.label}
             getOptionValue={opt => String(opt.value)}
-        // isClearable optional
+            isClearable
+            isDisabled={disabled ?? false}
         />
     );
 };
