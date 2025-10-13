@@ -56,7 +56,7 @@ const TaxPayerSelect: React.FC<TaxPayerSelectProps> = ({ setFieldValue }) => {
         () =>
             taxPayers.map(tp => ({
                 value: tp.ClientNo,
-                label: `${tp.OwnersName ?? ""} - ${tp.ClientNo ?? ""}`,
+                label: `${tp.ClientNo ?? ""}-${tp.OwnersName ?? ""}`,
             })),
         [taxPayers]
     );
