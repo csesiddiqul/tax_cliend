@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Container, Card, Button, Form, Spinner } from "react-bootstrap";
+import { Plus } from "react-feather";
 import {
     useReactTable,
     getCoreRowModel,
@@ -11,49 +12,29 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 
-import { useGetStreetsQuery, useDeleteStreetMutation, useExportExcelMutation } from "../../../../redux/api/streetsApi";
+import { useGetBankAccountsQuery, useDeleteBankAccountMutation } from "../../../../redux/api/bankAccountApi";
 import Create from "./Create";
 import Edit from "./Edit";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import { Plus } from "react-feather";
 
-const StreetsPage = () => {
-    const [exportExcel, { isLoading: excelExportLoading }] = useExportExcelMutation();
-
-    const handleExport = async () => {
-        try {
-            const blob = await exportExcel({ search: '' }).unwrap();
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'streets_export.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Export failed:', error);
-        }
-    };
-
-
+const BillGenerationPage = () => {
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     // Separate states for Create and Edit modals
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [editingStreet, setEditingStreet] = useState<any>(null);
+    const [editingBankAccount, setEditingBankAccount] = useState<any>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [deleteStreet] = useDeleteStreetMutation();
-    const { data, isLoading, error } = useGetStreetsQuery({
+    const [deleteBankAccount] = useDeleteBankAccountMutation();
+    const { data, isLoading, error, refetch } = useGetBankAccountsQuery({
         perPage,
         page: currentPage,
         search,
     });
-    const streets: any = data?.data || [];
+    const bankAccounts: any = data?.data || [];
     const meta = data?.meta;
     const columns = useMemo(
         () => [
@@ -63,13 +44,23 @@ const StreetsPage = () => {
                 cell: ({ row }: any) => row.index + 1,
             },
             {
-                accessorKey: "StreetID",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>StreetID</span>,
+                accessorKey: "BankNo",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>BankNo</span>,
 
             },
             {
-                accessorKey: "StreetName",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>Street Name</span>,
+                accessorKey: "BankName",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>BankName</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+            {
+                accessorKey: "Branch",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>Branch</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+            {
+                accessorKey: "AccountsNo",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>AccountsNo</span>,
                 cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
             },
             {
@@ -80,7 +71,7 @@ const StreetsPage = () => {
                         <Button
                             variant="outline-primary"
                             size="sm"
-                            onClick={() => setEditingStreet(row.original)}
+                            onClick={() => setEditingBankAccount(row.original)}
                         >
                             Edit
                         </Button>
@@ -99,7 +90,7 @@ const StreetsPage = () => {
     );
 
     const table = useReactTable({
-        data: streets,
+        data: bankAccounts,
         columns,
         state: { sorting, columnFilters, columnVisibility },
         getCoreRowModel: getCoreRowModel(),
@@ -123,12 +114,12 @@ const StreetsPage = () => {
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 
-    const handleDelete = async (street: any) => {
-        if (!street) return;
+    const handleDelete = async (bankAccount: any) => {
+        if (!bankAccount) return;
 
         const result = await Swal.fire({
             title: "Are you sure?",
-            text: `Do you want to delete "${street.StreetName}"?`,
+            text: `Do you want to delete "${bankAccount.BankAccountName}"?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -139,17 +130,17 @@ const StreetsPage = () => {
 
         if (result.isConfirmed) {
             try {
-                await deleteStreet(street.StreetID).unwrap();
+                await deleteBankAccount(bankAccount.BankNo).unwrap();
                 Swal.fire({
                     icon: "success",
                     title: "Deleted",
-                    text: `"${street.StreetName}" has been deleted.`,
+                    text: `data has been deleted.`,
                 });
             } catch (err: any) {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Failed to delete the street.",
+                    text: "Failed to delete the bankAccount.",
                 });
             }
         }
@@ -171,36 +162,16 @@ const StreetsPage = () => {
             <nav aria-label="breadcrumb" className="mb-3">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/dashboard">Home</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">Streets List</li>
+                    <li className="breadcrumb-item active" aria-current="page">Bank Account List</li>
                 </ol>
             </nav>
 
             <Card className="p-3 shadow-sm">
-
-
-
-
                 <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-
-
-                    <h4>Streets List</h4>
-
-                    <div className="flex items-center gap-4 ">
-
-                        <button
-                            onClick={handleExport}
-                            disabled={isLoading}
-                            className="bg-green-600 px-4 py-2 rounded "
-                            style={{ marginRight: '2px' }}
-                        >
-                            {isLoading ? 'Exporting...' : 'Export to Excel'}
-                        </button>
-
-                        <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-                            <Plus size={23} strokeWidth={2} className="mr-1" /> Add Street
-                        </Button>
-                    </div>
-
+                    <h4>Bank Account List</h4>
+                    <Button variant="primary" onClick={() => setShowCreateModal(true)}>
+                        <Plus size={23} strokeWidth={2} className="" />   Add 
+                    </Button>
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -221,11 +192,12 @@ const StreetsPage = () => {
                 </div>
 
                 {/* Edit Modal */}
-                {editingStreet && (
+                {editingBankAccount && (
                     <Edit
-                        show={!!editingStreet}
-                        handleClose={() => setEditingStreet(null)}
-                        street={editingStreet}
+                        show={!!editingBankAccount}
+                        handleClose={() => setEditingBankAccount(null)}
+                        bankAccount={editingBankAccount}
+                        refetch={refetch}
                     />
                 )}
 
@@ -302,8 +274,8 @@ const StreetsPage = () => {
 
 
             </Card>
-        </Container >
+        </Container>
     );
 };
 
-export default StreetsPage;
+export default BillGenerationPage;

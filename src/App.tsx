@@ -55,6 +55,7 @@ import Tooltips from "bootstrap-components/Tooltips";
 import Tables from "bootstrap-components/Tables";
 import PublicRoute from "pages/auth/PublicRoute";
 import ProtectedRoute from "pages/auth/ProtectedRoute";
+import BillGenerationPage from "pages/dashboard/pages/billGeneration/BillGenerationPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -87,6 +88,20 @@ const App = () => {
         ,
 
 
+        {
+          id: "bill-generation",
+          path: "/bill-generation",
+          children: [
+            {
+              path: "index",
+              element: <ProtectedRoute
+                element={<BillGenerationPage />}
+                requiredPermissions={['dashboard']}
+              />
+            },
+
+          ],
+        },
 
         {
           id: "taxPayerSearch",

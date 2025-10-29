@@ -43,6 +43,14 @@ export const DashboardMenu: DashboardMenuProps[] = [
     icon: "map",
     link: "/cruds/index",
   },
+
+  {
+    id: uuid(),
+    title: "Bill Generation",
+    icon: "shield",
+    link: "/bill-generation/index",
+  },
+
   {
     id: uuid(),
     title: "Tax Payer",
@@ -73,11 +81,12 @@ export const DashboardMenu: DashboardMenuProps[] = [
     icon: "box",
     link: "/tbl-prop-use-ids/index",
   },
+
   {
     id: uuid(),
     title: "Tax Payer Types",
     icon: "shield",
-    link: "/tax-payer-types/index",
+    link: "/bill-generation/index",
   },
 
   {

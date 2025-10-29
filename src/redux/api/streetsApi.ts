@@ -57,6 +57,16 @@ export const streetsApi = createApi({
     },
     tagTypes: ['StreetData'],
     endpoints: (builder) => ({
+
+        exportExcel: builder.mutation<Blob, { search?: string }>({
+            query: ({ search }) => ({
+                url: `admin/street/export?search=${search || ''}`,
+                method: 'GET',
+                responseHandler: async (response: any) => await response.blob(),
+            }),
+        }),
+
+
         getStreets: builder.query<ApiDataResponse, { perPage: number; page: number; search?: string }>({
             query: ({ perPage, page, search }) => `admin/streets?per_page=${perPage}&page=${page}&search=${search || ''}`,
             providesTags: (result) =>
@@ -111,6 +121,7 @@ export const streetsApi = createApi({
 });
 
 export const {
+    useExportExcelMutation,
     useGetStreetsQuery,
     useGetStreetByIdQuery,
     useCreateStreetMutation,
