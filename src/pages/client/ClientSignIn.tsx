@@ -4,19 +4,19 @@ import { Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { loginUser } from "../../redux/slice/authSlice";
+import { loginClient } from "../../redux/slice/authSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import Swal from "sweetalert2";
 
-const SignIn = () => {
+const ClientSignIn = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { roles, status, token } = useSelector((state: RootState) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [ClientNo, setClientNo] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneErr, setPhoneErr] = useState("");
+  const [clientNoErr, setClientNoErr] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [apiErr, setApiErr] = useState("");
 
@@ -27,7 +27,7 @@ const SignIn = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await dispatch(loginUser({ phone, password })).unwrap();
+      await dispatch(loginClient({ ClientNo, password })).unwrap();
       Swal.fire({
         title: "Success!",
         text: "Login Successful",
@@ -35,23 +35,26 @@ const SignIn = () => {
         confirmButtonText: "OK",
       });
     } catch (error: any) {
-      setPhoneErr(error?.data?.phone);
+      console.log(error?.errors?.ClientNo);
+      setClientNoErr(error?.errors?.ClientNo);
       setPasswordErr(error?.errors?.password);
-      setApiErr(error?.errors?.phone);
+      setApiErr(error?.errors?.clientNo);
     }
   };
 
   useEffect(() => {
     if (status === "succeeded" && token) {
-      if (roles.includes("administration") || roles.includes("admin")) {
-        navigate("/dashboard");
-      } else if (roles.includes("guest") || roles.includes("user")) {
-        navigate("/userpanel");
-      } else {
-        navigate("/unauthorized");
-      }
+      navigate("/user/profile");
+      // console.log(token);
+      // if (roles.includes("administration") || roles.includes("admin")) {
+
+      // } else if (roles.includes("guest") || roles.includes("user")) {
+      //   navigate("/userpanel");
+      // } else {
+      //   navigate("/unauthorized");
+      // }
     }
-  }, [status, token, navigate, roles]);
+  }, [status, token, navigate]);
 
   return (
     <Row className="align-items-center justify-content-center g-0 min-vh-100 bg-light">
@@ -68,24 +71,24 @@ const SignIn = () => {
                   className="mb-3"
                 />
               </Link>
-              <h3 className="fw-bold mb-2">Admin 👋</h3>
+              <h3 className="fw-bold mb-2">Tax Payer  👋</h3>
               <p className="text-muted">Please sign in to continue</p>
             </div>
 
             <Form onSubmit={handleSubmit}>
-              {/* Phone Number */}
-              <Form.Group className="mb-4" controlId="phone">
-                <Form.Label className="fw-semibold">Phone Number</Form.Label>
+              {/* Client No */}
+              <Form.Group className="mb-4" controlId="ClientNo">
+                <Form.Label className="fw-semibold">Client No</Form.Label>
                 <Form.Control
                   type="text"
-                  name="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter your phone number"
+                  name="ClientNo"
+                  value={ClientNo}
+                  onChange={(e) => setClientNo(e.target.value)}
+                  placeholder="Enter your Client No"
                   className="rounded-3 py-2"
                   required
                 />
-                {phoneErr && <p className="text-danger small mt-1">{phoneErr}</p>}
+                {clientNoErr && <p className="text-danger small mt-1">{clientNoErr}</p>}
                 {apiErr && <p className="text-danger small mt-1">{apiErr}</p>}
               </Form.Group>
 
@@ -152,12 +155,12 @@ const SignIn = () => {
 
               {/* Create account link */}
               <div className="text-center">
-                <span className="text-muted">Client </span>
+                <span className="text-muted">Admin  </span>
                 <Link
-                  to="/client/sign-in"
+                  to="/auth/sign-in"
                   className="fw-semibold text-primary"
                 >
-                   Login Page
+                  Login Page
                 </Link>
               </div>
             </Form>
@@ -168,4 +171,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ClientSignIn;

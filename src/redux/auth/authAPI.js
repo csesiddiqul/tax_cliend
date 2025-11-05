@@ -28,8 +28,8 @@ export const loginUser = (userData) => {
     return api.post('/login', userData);
 };
 
-export const loginPatient = (userData) => {
-    return api.post('/patient-login', userData);
+export const loginClient = (userData) => {
+    return api.post('/client/login', userData);
 };
 
 export const registerUser = (userData) => {

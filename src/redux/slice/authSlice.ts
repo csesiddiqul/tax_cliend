@@ -28,11 +28,11 @@ export const loginUser = createAsyncThunk(
 );
 
 
-export const loginPatient = createAsyncThunk(
-    'auth/loginPatient',
+export const loginClient = createAsyncThunk(
+    'auth/loginClient',
     async (userData: any, { rejectWithValue }) => {
         try {
-            const response = await API.post('/patient-login', userData);
+            const response = await API.post('/client/login', userData);
             return response.data;
         } catch (error) {
             const axiosError = error as AxiosError;
@@ -110,23 +110,23 @@ const authSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload as string | null;
             })
-            .addCase(loginPatient.pending, (state) => {
+            .addCase(loginClient.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
             })
-            .addCase(loginPatient.fulfilled, (state, action) => {
+            .addCase(loginClient.fulfilled, (state, action) => {
                 const { data } = action.payload;
                 state.status = 'succeeded';
                 state.token = data.token;
                 state.user = data;
-                state.roles = data.roles || [];
+                state.roles = data.roles || ['client'];
                 state.permissions = data.permissions || [];
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data));
-                localStorage.setItem('roles', JSON.stringify(data.roles || []));
+                localStorage.setItem('roles', JSON.stringify(data.roles || ['client']));
                 localStorage.setItem('permissions', JSON.stringify(data.permissions || []));
             })
-            .addCase(loginPatient.rejected, (state, action) => {
+            .addCase(loginClient.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload as string | null;
             });

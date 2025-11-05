@@ -2,15 +2,15 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useEffect, useState, ReactNode } from 'react';
 
-// Define prop types for the ProtectedRoute component
-interface ProtectedRouteProps {
+// Define prop types for the UserProtectedRoute component
+interface UserProtectedRouteProps {
   element: ReactNode;
   requiredRoles?: string[];
   requiredPermissions?: string[];
   redirectTo?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+const UserProtectedRoute: React.FC<UserProtectedRouteProps> = ({
   element,
   requiredRoles = [],
   requiredPermissions = [],
@@ -51,7 +51,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (isAuthorized === null) return null;
 
   // If no token, redirect to login
-  if (!token) return <Navigate to="/auth/sign-in" />;
+  if (!token) return <Navigate to="client/sign-in" />;
 
 
   // Check if the user has required roles and permissions
@@ -59,15 +59,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const hasRequiredPermission = requiredPermissions.length ? requiredPermissions.some(perm => permissions.includes(perm)) : true;
 
 
+  // console.log(requiredRoles);
+
   // If the user lacks required roles or permissions, redirect to unauthorized
   if (!hasRequiredRole || !hasRequiredPermission) {
-    return token
-      ? <Navigate to="/user/profile" replace />
-      : <Navigate to="/unauthorized" replace />;
+    // return <Navigate to="/unauthorized" />;
   }
 
   // Return the protected element if authorized
   return <>{element}</>;
 };
 
-export default ProtectedRoute;
+export default UserProtectedRoute;

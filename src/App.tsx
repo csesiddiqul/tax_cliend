@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthenticationLayout from "layouts/AuthenticationLayout";
 import RootLayout from "layouts/RootLayout";
 import SignIn from "./pages/auth/SignIn";
+import ClientSignIn from "./pages/client/ClientSignIn";
 import ForgetPassword from "pages/auth/ForgetPassword";
 import SignUp from "./pages/auth/SignUp";
 import Dashboard from "pages/dashboard/Index";
@@ -55,6 +56,7 @@ import Tooltips from "bootstrap-components/Tooltips";
 import Tables from "bootstrap-components/Tables";
 import PublicRoute from "pages/auth/PublicRoute";
 import ProtectedRoute from "pages/auth/ProtectedRoute";
+import UserProtectedRoute from "pages/auth/UserProtectedRoute";
 import BillGenerationPage from "pages/dashboard/pages/billGeneration/BillGenerationPage";
 
 const App = () => {
@@ -84,10 +86,7 @@ const App = () => {
               requiredPermissions={['dashboard']}
             />
           )
-        }
-        ,
-
-
+        },
         {
           id: "bill-generation",
           path: "/bill-generation",
@@ -102,7 +101,6 @@ const App = () => {
 
           ],
         },
-
         {
           id: "taxPayerSearch",
           path: "/taxPayer",
@@ -145,7 +143,6 @@ const App = () => {
           ],
         }
         ,
-
         {
           id: "streets",
           path: "/streets",
@@ -306,6 +303,9 @@ const App = () => {
         },
       ],
     },
+
+
+
     {
       id: "auth",
       path: "/auth",
@@ -328,6 +328,61 @@ const App = () => {
           path: "forget-password",
           Component: ForgetPassword,
         },
+      ],
+    },
+
+
+
+    {
+      id: "client",
+      path: "/client",
+      Component: AuthenticationLayout,
+      children: [
+        {
+          id: "client-sign-in",
+          path: "sign-in",
+          element: <PublicRoute
+            element={<ClientSignIn />}
+          />,
+        },
+        {
+          id: "client-sign-up",
+          path: "sign-up",
+          Component: SignUp,
+        },
+        {
+          id: "client-forget-password",
+          path: "forget-password",
+          Component: ForgetPassword,
+        },
+      ],
+    },
+
+
+
+    {
+      id: "user",
+      path: "/user",
+      Component: RootLayout,
+      errorElement: <NotFound />,
+      children: [
+        {
+          id: "profile",
+          path: "profile",
+          // element: (
+          //   <UserProtectedRoute
+          //     element={<Dashboard />}
+          //     requiredPermissions={['dashboard']}
+          //   />
+          // )
+          element: <Dashboard />,
+        },
+        {
+          id: "profile-edit",
+          path: "profile-edit",
+          Component: SignUp,
+        },
+
       ],
     },
   ]);

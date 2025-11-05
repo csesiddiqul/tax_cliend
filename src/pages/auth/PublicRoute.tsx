@@ -14,9 +14,12 @@ const getRedirectPath = (roles: string[]): string => {
     return '/dashboard';
   } else if (roles.includes('guest') || roles.includes('user')) {
     return '/user-panel';
-  }
+  } else if (roles.includes('client')) {
+    return '/user/profile';
+  } 
 
-  return '/unauthorize';
+
+  return '/unauthorized';
 };
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ element, redirectTo }) => {
