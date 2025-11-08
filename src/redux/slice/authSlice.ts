@@ -79,6 +79,7 @@ const authSlice = createSlice({
             localStorage.removeItem('roles');
             localStorage.removeItem('permissions');
         },
+        
         setUser(state, action) {
             state.user = action.payload;
             state.roles = action.payload.roles || [];

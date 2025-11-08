@@ -131,12 +131,7 @@ const SignIn = () => {
                     Remember me
                   </Form.Check.Label>
                 </Form.Check>
-                <Link
-                  to="/auth/forget-password"
-                  className="text-primary fw-semibold"
-                >
-                  Forgot password?
-                </Link>
+               
               </div>
 
               {/* Sign In Button */}

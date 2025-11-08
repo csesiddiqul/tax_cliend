@@ -6,6 +6,7 @@ import AuthenticationLayout from "layouts/AuthenticationLayout";
 import RootLayout from "layouts/RootLayout";
 import SignIn from "./pages/auth/SignIn";
 import ClientSignIn from "./pages/client/ClientSignIn";
+import ClientVerifyPhone from "pages/client/ClientVerifyPhone";
 import ForgetPassword from "pages/auth/ForgetPassword";
 import SignUp from "./pages/auth/SignUp";
 import Dashboard from "pages/dashboard/Index";
@@ -58,6 +59,7 @@ import PublicRoute from "pages/auth/PublicRoute";
 import ProtectedRoute from "pages/auth/ProtectedRoute";
 import UserProtectedRoute from "pages/auth/UserProtectedRoute";
 import BillGenerationPage from "pages/dashboard/pages/billGeneration/BillGenerationPage";
+import ClientOtpSubmit from "pages/client/ClientOtpSubmit";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -350,10 +352,26 @@ const App = () => {
           path: "sign-up",
           Component: SignUp,
         },
+
         {
-          id: "client-forget-password",
-          path: "forget-password",
-          Component: ForgetPassword,
+          id: "client-verify-phone",
+          path: "verify-phone",
+          element: (
+            <ProtectedRoute
+              element={<ClientVerifyPhone />}
+
+            />
+          )
+        },
+        {
+          id: "client-otp-submit",
+          path: "otp-submit",
+          element: (
+            <ProtectedRoute
+              element={<ClientOtpSubmit />}
+
+            />
+          )
         },
       ],
     },
@@ -369,14 +387,15 @@ const App = () => {
         {
           id: "profile",
           path: "profile",
-          // element: (
-          //   <UserProtectedRoute
-          //     element={<Dashboard />}
-          //     requiredPermissions={['dashboard']}
-          //   />
-          // )
-          element: <Dashboard />,
+          element: (
+            <UserProtectedRoute
+              element={<Dashboard />}
+
+            />
+          )
         },
+
+
         {
           id: "profile-edit",
           path: "profile-edit",

@@ -1,9 +1,9 @@
 //import node module libraries
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import Sidebar from "components/navbars/sidebar/Sidebar";
 import UserSideBar from "components/navbars/sidebar/UserSideBar";
 import Header from "components/navbars/topbar/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const RootLayout = () => {
@@ -13,12 +13,20 @@ const RootLayout = () => {
   };
   const { token, roles } = useSelector((state: any) => state.auth);
 
- 
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!token || !roles?.[0]) {
+      navigate("/auth/sign-in");
+    }
+  }, [token, roles, navigate]);
+
   return (
     <section className="bg-light">
       <div id="db-wrapper" className={`${showMenu ? "" : "toggled"}`}>
         <div className="navbar-vertical navbar">
+
           {token && roles?.[0] === 'client' ? (
+            
             <UserSideBar showMenu={showMenu} toggleMenu={ToggleMenu} />
           ) : (
             <Sidebar showMenu={showMenu} toggleMenu={ToggleMenu} />

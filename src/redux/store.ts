@@ -8,6 +8,7 @@ import { crudsApi } from './api/crudsApi';
 import { taxPayerTypeApi } from './api/taxPayerTypeApi';
 import { taxRatesApi } from './api/taxRatesApi';
 import { taxPayerApi } from './api/taxPayerApi';
+import { rtkAuthApi } from './api/rtkAuthApi';
 const store = configureStore({
     reducer: {
         auth: authReducer,
@@ -19,6 +20,7 @@ const store = configureStore({
         [taxPayerTypeApi.reducerPath]: taxPayerTypeApi.reducer,
         [taxRatesApi.reducerPath]: taxRatesApi.reducer,
         [taxPayerApi.reducerPath]: taxPayerApi.reducer,
+        [rtkAuthApi.reducerPath]: rtkAuthApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -29,6 +31,7 @@ const store = configureStore({
             .concat(taxPayerTypeApi.middleware)
             .concat(taxRatesApi.middleware)
             .concat(taxPayerApi.middleware)
+            .concat(rtkAuthApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

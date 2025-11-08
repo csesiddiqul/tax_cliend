@@ -16,8 +16,11 @@ const UserProtectedRoute: React.FC<UserProtectedRouteProps> = ({
   requiredPermissions = [],
   // redirectTo = '/',
 }) => {
-  const { token, roles, permissions } = useSelector((state: any) => state.auth);
+  const { token, roles, permissions, user } = useSelector((state: any) => state.auth);
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null); // null: loading, true: authorized, false: unauthorized
+
+  // console.log('user proted route ', user?.client?.is_phone_verified);
+
 
   useEffect(() => {
     const validateUserRolesAndPermissions = async () => {
@@ -53,6 +56,8 @@ const UserProtectedRoute: React.FC<UserProtectedRouteProps> = ({
   // If no token, redirect to login
   if (!token) return <Navigate to="client/sign-in" />;
 
+
+  if (user?.client?.is_phone_verified == 0) return <Navigate to="/client/verify-phone" />
 
   // Check if the user has required roles and permissions
   const hasRequiredRole = requiredRoles.length ? requiredRoles.some(role => roles.includes(role)) : true;
