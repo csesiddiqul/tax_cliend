@@ -12,7 +12,8 @@ export interface ApiData {
     data?: any;
     ClientNo?: any;
     code?: any;
-    message?: any
+    message?: any;
+    client?: any;
 }
 
 export interface ApiDataResponse {
@@ -53,10 +54,10 @@ export const rtkAuthApi = createApi({
         const result = await baseQuery(args, api, extraOptions);
 
         if (result.error?.status === 401) {
-            // const dispatch = api.dispatch as AppDispatch;
-            // dispatch(logout());
-            // localStorage.removeItem('token');
-            // window.location.href = '/auth/sign-in';
+            const dispatch = api.dispatch as AppDispatch;
+            dispatch(logout());
+            localStorage.removeItem('token');
+            window.location.href = '/client/sign-in';
         }
 
         return result;

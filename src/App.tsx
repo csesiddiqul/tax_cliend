@@ -60,6 +60,7 @@ import ProtectedRoute from "pages/auth/ProtectedRoute";
 import UserProtectedRoute from "pages/auth/UserProtectedRoute";
 import BillGenerationPage from "pages/dashboard/pages/billGeneration/BillGenerationPage";
 import ClientOtpSubmit from "pages/client/ClientOtpSubmit";
+import OtherAccountTables from "bootstrap-components/OtherAccountTables";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -389,7 +390,17 @@ const App = () => {
           path: "profile",
           element: (
             <UserProtectedRoute
-              element={<Dashboard />}
+              element={<Profile />}
+
+            />
+          )
+        },
+        {
+          id: "Tables",
+          path: "tables",
+          element: (
+            <UserProtectedRoute
+              element={<OtherAccountTables />}
 
             />
           )

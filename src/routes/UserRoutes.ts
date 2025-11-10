@@ -31,6 +31,12 @@ export const UserRoutes: DashboardMenuProps[] = [
     icon: "home",
     link: "/user/profile",
   },
+  {
+    id: uuid(),
+    title: "Tables",
+    icon: "home",
+    link: "/user/tables",
+  },
  
 
 ];

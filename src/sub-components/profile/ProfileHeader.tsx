@@ -1,8 +1,19 @@
 // import node module libraries
 import { Link } from "react-router-dom";
 import { Col, Row, Image } from "react-bootstrap";
+import { useGetTaxPayerInfoQuery } from "redux/api/rtkAuthApi";
 
 const ProfileHeader = () => {
+  const { data, isLoading, isError } = useGetTaxPayerInfoQuery();
+
+
+  const user: any = data?.client || [];
+
+  // console.log(user);
+
+  if (isLoading) return 'loading .'
+  if (isError) return 'error .'
+
   return (
     <Row className="align-items-center">
       <Col xl={12} lg={12} md={12} xs={12}>
@@ -32,18 +43,23 @@ const ProfileHeader = () => {
                   title=""
                   data-original-title="Verified"
                 >
-                  <Image
-                    src="/images/svg/checked-mark.svg"
-                    alt=""
-                    height="30"
-                    width="30"
-                  />
+                  {user.is_phone_verified ? (
+                    <Image
+                      src="/images/svg/checked-mark.svg"
+                      alt=""
+                      height="30"
+                      width="30"
+                    />
+                  ) : (
+                    ''
+                  )}
+
                 </Link>
               </div>
               {/* text */}
               <div className="lh-1">
                 <h2 className="mb-0">
-                  Jitu Chauhan
+                  {user?.OwnersName}
                   <Link
                     to="#!"
                     className="text-decoration-none"
@@ -53,7 +69,7 @@ const ProfileHeader = () => {
                     data-original-title="Beginner"
                   ></Link>
                 </h2>
-                <p className="mb-0 d-block">@imjituchauhan</p>
+                {/* <p className="mb-0 d-block">@imjituchauhan</p> */}
               </div>
             </div>
             <div>
@@ -66,38 +82,7 @@ const ProfileHeader = () => {
             </div>
           </div>
           {/* nav */}
-          <ul className="nav nav-lt-tab px-4" id="pills-tab" role="tablist">
-            <li className="nav-item">
-              <Link className="nav-link active" to="#">
-                Overview
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Project
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Files
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Teams
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Followers
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="#">
-                Activity
-              </Link>
-            </li>
-          </ul>
+
         </div>
       </Col>
     </Row>

@@ -11,11 +11,7 @@ import Teams from "./dashboard/Teams";
 // sub components for /pages/profile
 import AboutMe from "./profile/AboutMe";
 import ActivityFeed from "./profile/ActivityFeed";
-import MyTeam from "./profile/MyTeam";
 import ProfileHeader from "./profile/ProfileHeader";
-import ProjectsContributions from "./profile/ProjectsContributions";
-import RecentFromBlog from "./profile/RecentFromBlog";
-
 // sub components for /pages/billing
 import CurrentPlan from "./billing/CurrentPlan";
 import BillingAddress from "./billing/BillingAddress";
@@ -33,10 +29,7 @@ export {
   Teams,
   AboutMe,
   ActivityFeed,
-  MyTeam,
   ProfileHeader,
-  ProjectsContributions,
-  RecentFromBlog,
   CurrentPlan,
   BillingAddress,
   DeleteAccount,
