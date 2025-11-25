@@ -48,7 +48,19 @@ export const DashboardMenu: DashboardMenuProps[] = [
     id: uuid(),
     title: "Bill Generation",
     icon: "shield",
-    link: "/bill-generation/index",
+    link: "/bill-generation/general",
+  },
+  {
+    id: uuid(),
+    title: "Bill Govt",
+    icon: "shield",
+    link: "/bill-generation/govt",
+  },
+  {
+    id: uuid(),
+    title: "Single Bill",
+    icon: "shield",
+    link: "/bill-generation/single",
   },
 
   {
@@ -94,6 +106,12 @@ export const DashboardMenu: DashboardMenuProps[] = [
     title: "Tax Rates",
     icon: "shield",
     link: "/tax-rates/index",
+  },
+  {
+    id: uuid(),
+    title: "Year",
+    icon: "shield",
+    link: "/tax-year/index",
   },
 
   {

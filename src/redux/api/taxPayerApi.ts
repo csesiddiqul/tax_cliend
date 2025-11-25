@@ -101,6 +101,11 @@ export const taxPayerApi = createApi({
                     : [{ type: 'TaxPayerData', id: 'LIST' }],
         }),
 
+        getTaxPayerBillById: builder.query<ApiData, string>({
+            query: (id) => `bill/single-bill-show/${id}`,
+            providesTags: (_, __, id) => [{ type: 'TaxPayerData', id }],
+        }),
+
         getTaxPayerById: builder.query<ApiData, string>({
             query: (id) => `admin/tax-payers/${id}`,
             providesTags: (_, __, id) => [{ type: 'TaxPayerData', id }],
@@ -150,6 +155,7 @@ export const taxPayerApi = createApi({
 export const {
     useGetTaxPayerListSelectQuery,
     useGetTaxPayersQuery,
+    useLazyGetTaxPayerBillByIdQuery,
     useGetTaxPayerByIdQuery,
     useLazyGetTaxPayerClientByIdQuery,
     useLazyGetTaxPayerByIdQuery,

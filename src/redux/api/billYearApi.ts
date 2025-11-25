@@ -5,14 +5,20 @@ import { AppDispatch } from '../store';
 
 export interface ApiData {
     id: string | number;
-    BankNo: any;
-    BankName?: any;
-    Branch?: any;
-    AccountsNo?: any;
+    Id: any;
+    HoldingT: any;
+    ConservancyT?: any;
+    WaterT?: any;
+    LightT?: any;
+    TotT?: any;
     data?: any;
+    Year?: any;
+    Year1?: any;
+    Period_of_bill?: any;
+
 }
 
-export interface ApiDataResponse {
+export interface BillYear {
     data: ApiData[];
     meta: {
         current_page: number;
@@ -30,8 +36,8 @@ export interface ApiDataResponse {
     };
 }
 
-export const bankAccountApi = createApi({
-    reducerPath: 'bankAccountApi',
+export const billYearApi = createApi({
+    reducerPath: 'billYearApi',
     baseQuery: async (args, api, extraOptions) => {
         const baseQuery = fetchBaseQuery({
             baseUrl: API_BASE_URL,
@@ -57,25 +63,32 @@ export const bankAccountApi = createApi({
 
         return result;
     },
-    tagTypes: ['BankAccountData'],
+    tagTypes: ['BillYearData'],
     endpoints: (builder) => ({
-        getBankAccounts: builder.query<ApiDataResponse, { perPage: number; page: number; search?: string }>({
-            query: ({ perPage, page, search }) => `admin/bank-accounts?per_page=${perPage}&page=${page}&search=${search || ''}`,
+        getBillYears: builder.query<BillYear, { perPage: number; page: number; search?: string }>({
+            query: ({ perPage, page, search }) => `bill/year?per_page=${perPage}&page=${page}&search=${search || ''}`,
             providesTags: (result) =>
                 result
                     ? [
-                        ...result.data.map(({ id }) => ({ type: 'BankAccountData' as const, id })),
-                        { type: 'BankAccountData', id: 'LIST' },
+                        ...result.data.map(({ id }) => ({ type: 'BillYearData' as const, id })),
+                        { type: 'BillYearData', id: 'LIST' },
                     ]
-                    : [{ type: 'BankAccountData', id: 'LIST' }],
+                    : [{ type: 'BillYearData', id: 'LIST' }],
         }),
 
-        getBankAccountById: builder.query<ApiData, string>({
-            query: (id) => `admin/bank-accounts/${id}`,
-            providesTags: (_, __, id) => [{ type: 'BankAccountData', id }],
+        getBillYearById: builder.query<ApiData, string>({
+            query: (id) => `bill/year/${id}`,
+            providesTags: (_, __, id) => [{ type: 'BillYearData', id }],
         }),
 
-        createBankAccount: builder.mutation<ApiData, Partial<ApiData>>({
+
+        getBillYear: builder.query<ApiData, void>({
+            query: () => `bill/year`,
+            providesTags: ['BillYearData'],
+        }),
+
+
+        createBillYear: builder.mutation<ApiData, Partial<ApiData>>({
             query: (newData: any) => {
                 const formData = new FormData();
                 Object.entries(newData).forEach(([key, value]) => {
@@ -85,38 +98,39 @@ export const bankAccountApi = createApi({
                 });
 
                 return {
-                    url: 'admin/bank-accounts',
+                    url: 'bill/year',
                     method: 'POST',
                     body: formData,
                 };
             },
-            invalidatesTags: [{ type: 'BankAccountData', id: 'LIST' }],
+            invalidatesTags: [{ type: 'BillYearData', id: 'LIST' }],
         }),
 
-        updateBankAccount: builder.mutation<ApiData, { id: string; data: FormData }>({
+        updateBillYear: builder.mutation<ApiData, { id: string; data: FormData }>({
             query: ({ id, data }) => ({
-                url: `admin/bank-accounts/${id}`,
+                url: `bill/year/${id}`,
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: (_, error, { id }) => (error ? [] : [{ type: 'BankAccountData', id }]),
+            invalidatesTags: (_, error, { id }) => (error ? [] : [{ type: 'BillYearData', id }]),
         }),
 
-        deleteBankAccount: builder.mutation<{ success: boolean; id: string }, string>({
+        deleteBillYear: builder.mutation<{ success: boolean; id: string }, string>({
             query: (id) => ({
-                url: `admin/bank-accounts/${id}`,
+                url: `bill/year/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: () => [{ type: 'BankAccountData', id: 'LIST' }],
+            invalidatesTags: () => [{ type: 'BillYearData', id: 'LIST' }],
         }),
     }),
 });
 
 export const {
-    useGetBankAccountsQuery,
-    useLazyGetBankAccountByIdQuery,
-    useGetBankAccountByIdQuery,
-    useCreateBankAccountMutation,
-    useUpdateBankAccountMutation,
-    useDeleteBankAccountMutation,
-} = bankAccountApi;
+    useGetBillYearsQuery,
+    useGetBillYearQuery,
+    useGetBillYearByIdQuery,
+    useLazyGetBillYearByIdQuery,
+    useCreateBillYearMutation,
+    useUpdateBillYearMutation,
+    useDeleteBillYearMutation,
+} = billYearApi;

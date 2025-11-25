@@ -33,10 +33,11 @@ export const UserRoutes: DashboardMenuProps[] = [
   },
   {
     id: uuid(),
-    title: "Tables",
+    title: "Other Account",
     icon: "home",
     link: "/user/tables",
   },
- 
+
+
 
 ];

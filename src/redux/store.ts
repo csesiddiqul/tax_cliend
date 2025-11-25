@@ -7,8 +7,10 @@ import { tblPropUseIdApi } from './api/tblPropUseIdApi';
 import { crudsApi } from './api/crudsApi';
 import { taxPayerTypeApi } from './api/taxPayerTypeApi';
 import { taxRatesApi } from './api/taxRatesApi';
+import { billYearApi } from './api/billYearApi';
 import { taxPayerApi } from './api/taxPayerApi';
 import { rtkAuthApi } from './api/rtkAuthApi';
+import { billGenerateApi } from './api/billGenerateApi.ts';
 const store = configureStore({
     reducer: {
         auth: authReducer,
@@ -19,8 +21,10 @@ const store = configureStore({
         [crudsApi.reducerPath]: crudsApi.reducer,
         [taxPayerTypeApi.reducerPath]: taxPayerTypeApi.reducer,
         [taxRatesApi.reducerPath]: taxRatesApi.reducer,
+        [billYearApi.reducerPath]: billYearApi.reducer,
         [taxPayerApi.reducerPath]: taxPayerApi.reducer,
         [rtkAuthApi.reducerPath]: rtkAuthApi.reducer,
+        [billGenerateApi.reducerPath]: billGenerateApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
@@ -30,8 +34,10 @@ const store = configureStore({
             .concat(tblPropUseIdApi.middleware)
             .concat(taxPayerTypeApi.middleware)
             .concat(taxRatesApi.middleware)
+            .concat(billYearApi.middleware)
             .concat(taxPayerApi.middleware)
             .concat(rtkAuthApi.middleware)
+            .concat(billGenerateApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

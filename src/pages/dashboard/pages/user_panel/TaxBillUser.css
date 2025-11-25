@@ -1,0 +1,296 @@
+
+@import url('https://fonts.cdnfonts.com/css/solaimanlipi');
+
+.tax-bill {
+  font-family: "Noto Serif Bengali", "SolaimanLipi", sans-serif;                                 
+  background: #fff;
+}
+
+.bill-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bill-wrapper {
+  width: 50%;
+  background: #fff;
+}
+
+.bill {
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #000;
+  padding-bottom: 8px;
+}
+
+.logooo{
+  display: flex;
+  justify-content: space-between;
+}
+
+.logooo h4{
+  font-size: 25px;
+  color: #5151a8;
+  font-weight: bold;
+}
+
+
+.bill-header .title {
+  text-align: center;
+}
+
+.bill-header .copy-text {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+.bill-body {
+  margin-top: 12px;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.info-grid p {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 130px 20px auto;
+  align-items: start;
+  gap: 4px;
+  line-height: 1.4;
+}
+
+.info-grid .rightt {
+  text-align: right;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 130px 20px auto;
+  align-items: start;
+  gap: 4px;
+  line-height: 1.4;
+}
+
+
+.label {
+  font-weight: 500;
+}
+
+.colon {
+  text-align: right;
+  padding-right: 4px;
+}
+
+.value {
+  font-weight: 400;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+
+.tax-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.colorr{
+  color:#5151a8;
+}
+
+.colorrr {
+  color:hsl(0, 97%, 38%);
+}
+
+.bil span{
+  color: rgb(34, 34, 34) !important;
+}
+
+.tax-table th,
+.tax-table td {
+  border: 1px solid #000;
+  padding: 4px;
+  text-align: center;
+}
+
+.tax-table th {
+  background: #f5f5f5;
+}
+
+.tax-table .total td {
+  font-weight: bold;
+}
+
+.bill-footer {
+  margin-top: 15px;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
+/* Print Style */
+@media print {
+  .no-print {
+    display: none;
+  }
+  .bill-container {
+    gap: 0;
+  }
+  .bill-wrapper {
+    border: none;
+    padding: 0;
+  }
+}
+
+
+.tax-table-wrapper {
+  margin-top: 15px;
+}
+
+/* Main Table (Top Table) */
+.tax-table.main-table th {
+  background-color: #e5f4ff;
+  font-weight: 600;
+  border: 1px solid #000;
+}
+
+.tax-table.main-table td {
+  border: 1px solid #000;
+  text-align: center;
+  padding: 3px 5px;
+}
+
+.tax-table.main-table th[rowspan],
+.tax-table.main-table th[colspan] {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.tax-table.main-table .total-row td {
+  background: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Second Table (Bottom Table) */
+.tax-table.sub-table {
+  margin-top: 12px;
+}
+
+.tax-table.sub-table th,
+.tax-table.sub-table td {
+  border: 1px solid #000;
+  text-align: center;
+  padding: 3px 5px;
+}
+
+.tax-table.sub-table thead .table-title {
+  background: #ffecec;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.tax-table.sub-table thead th {
+  background: #fff4f4;
+  font-weight: 600;
+}
+
+.tax-table.sub-table .total-row td {
+  background: #f9f9f9;
+  font-weight: bold;
+}
+
+.bank-section {
+  border: 1px solid #000;
+  background: #e6f0fa;
+  padding: 8px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.signatures {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 5px;
+}
+
+.sign-box {
+  text-align: left;
+  width: 50%;
+}
+
+.sign-box.right {
+  text-align: right;
+}
+
+.sign-box p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.underline {
+  border-bottom: 1px solid #000;
+  width: 160px;
+  margin-top: 2px;
+}
+
+.bank-info {
+  border: 1px solid #000;
+  background: #dbe9f7;
+  padding: 6px 10px;
+  margin-top: 4px;
+}
+
+.bank-info p {
+  margin: 2px 0;
+  display: flex;
+  gap: 6px;
+}
+
+.label {
+  font-weight: 500;
+  min-width: 130px;
+}
+
+.value {
+  flex: 1;
+}
+
+.bank-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.bank-bottom p {
+  margin: 0;
+}
+
+.underline.small {
+  border-bottom: 1px solid #000;
+  width: 100px;
+  margin-top: 2px;
+}
+
+.notice {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 6px;
+  font-size: 14px;
+}

@@ -12,29 +12,29 @@ import {
     VisibilityState,
 } from "@tanstack/react-table";
 
-import { useGetBankAccountsQuery, useDeleteBankAccountMutation } from "../../../../redux/api/bankAccountApi";
+import { useGetTaxRatesQuery, useDeleteTaxRateMutation } from "../../../../redux/api/taxRatesApi";
 import Create from "./Create";
 import Edit from "./Edit";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
-const BillGenerationPage = () => {
+const TaxYearPage = () => {
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     // Separate states for Create and Edit modals
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [editingBankAccount, setEditingBankAccount] = useState<any>(null);
+    const [editingTaxRate, setEditingTaxRate] = useState<any>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [deleteBankAccount] = useDeleteBankAccountMutation();
-    const { data, isLoading, error, refetch } = useGetBankAccountsQuery({
+    const [deleteTaxRate] = useDeleteTaxRateMutation();
+    const { data, isLoading, error, refetch } = useGetTaxRatesQuery({
         perPage,
         page: currentPage,
         search,
     });
-    const bankAccounts: any = data?.data || [];
+    const taxRates: any = data?.data || [];
     const meta = data?.meta;
     const columns = useMemo(
         () => [
@@ -44,25 +44,58 @@ const BillGenerationPage = () => {
                 cell: ({ row }: any) => row.index + 1,
             },
             {
-                accessorKey: "BankNo",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>BankNo</span>,
+                accessorKey: "Id",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>Id</span>,
 
             },
+
             {
-                accessorKey: "BankName",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>BankName</span>,
+                accessorKey: "HoldingT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>HoldingT</span>,
                 cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
             },
+
             {
-                accessorKey: "Branch",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>Branch</span>,
+                accessorKey: "ConservancyT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>ConservancyT</span>,
                 cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
             },
+
+
+
             {
-                accessorKey: "AccountsNo",
-                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>AccountsNo</span>,
+                accessorKey: "WaterT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>WaterT</span>,
                 cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
             },
+
+
+            {
+                accessorKey: "HoldingT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>HoldingT</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+
+
+            {
+                accessorKey: "WaterT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>WaterT</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+
+            {
+                accessorKey: "LightT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>LightT</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+
+            {
+                accessorKey: "TotT",
+                header: () => <span style={{ fontSize: "16px", fontWeight: "bold" }}>TotT</span>,
+                cell: (info: any) => <span className="fw-bold">{info.getValue()}</span>,
+            },
+
+
             {
                 id: "actions",
                 header: () => <span className="fw-bold">Actions</span>,
@@ -71,7 +104,7 @@ const BillGenerationPage = () => {
                         <Button
                             variant="outline-primary"
                             size="sm"
-                            onClick={() => setEditingBankAccount(row.original)}
+                            onClick={() => setEditingTaxRate(row.original)}
                         >
                             Edit
                         </Button>
@@ -90,7 +123,7 @@ const BillGenerationPage = () => {
     );
 
     const table = useReactTable({
-        data: bankAccounts,
+        data: taxRates,
         columns,
         state: { sorting, columnFilters, columnVisibility },
         getCoreRowModel: getCoreRowModel(),
@@ -114,12 +147,12 @@ const BillGenerationPage = () => {
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 
-    const handleDelete = async (bankAccount: any) => {
-        if (!bankAccount) return;
+    const handleDelete = async (tbl_PropType: any) => {
+        if (!tbl_PropType) return;
 
         const result = await Swal.fire({
             title: "Are you sure?",
-            text: `Do you want to delete "${bankAccount.BankAccountName}"?`,
+            text: `Do you want to delete ?`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
@@ -130,7 +163,7 @@ const BillGenerationPage = () => {
 
         if (result.isConfirmed) {
             try {
-                await deleteBankAccount(bankAccount.BankNo).unwrap();
+                await deleteTaxRate(tbl_PropType.Id).unwrap();
                 Swal.fire({
                     icon: "success",
                     title: "Deleted",
@@ -140,7 +173,7 @@ const BillGenerationPage = () => {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Failed to delete the bankAccount.",
+                    text: "Failed to delete the tbl_PropType.",
                 });
             }
         }
@@ -162,15 +195,15 @@ const BillGenerationPage = () => {
             <nav aria-label="breadcrumb" className="mb-3">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link to="/dashboard">Home</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">Bank Account List</li>
+                    <li className="breadcrumb-item active" aria-current="page">Tax Rates List</li>
                 </ol>
             </nav>
 
             <Card className="p-3 shadow-sm">
                 <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h4>Bank Account List</h4>
+                    <h4>Tax Rates List</h4>
                     <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-                        <Plus size={23} strokeWidth={2} className="" />   Add 
+                        <Plus size={23} strokeWidth={2} className="" />   Add Tax Rates
                     </Button>
                 </div>
 
@@ -183,7 +216,7 @@ const BillGenerationPage = () => {
                         ))}
                     </Form.Select>
                     <Form.Control
-                        type="text"
+                        type="number"
                         placeholder="Search..."
                         value={search}
                         onChange={handleSearchChange}
@@ -192,11 +225,11 @@ const BillGenerationPage = () => {
                 </div>
 
                 {/* Edit Modal */}
-                {editingBankAccount && (
+                {editingTaxRate && (
                     <Edit
-                        show={!!editingBankAccount}
-                        handleClose={() => setEditingBankAccount(null)}
-                        bankAccount={editingBankAccount}
+                        show={!!editingTaxRate}
+                        handleClose={() => setEditingTaxRate(null)}
+                        TaxRate={editingTaxRate}
                         refetch={refetch}
                     />
                 )}
@@ -278,4 +311,4 @@ const BillGenerationPage = () => {
     );
 };
 
-export default BillGenerationPage;
+export default TaxYearPage;

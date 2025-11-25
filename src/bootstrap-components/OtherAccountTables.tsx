@@ -1,5 +1,5 @@
 // import node module libraries
-import { Col, Row, Card, Table, Nav, Tab, Container } from "react-bootstrap";
+import { Col, Row, Card, Table, Tab, Container } from "react-bootstrap";
 
 // import widget/custom components
 import { HighlightCode } from "widgets";

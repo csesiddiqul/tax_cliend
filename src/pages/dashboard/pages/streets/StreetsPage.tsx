@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { Plus } from "react-feather";
 
 const StreetsPage = () => {
-    const [exportExcel, { isLoading: excelExportLoading }] = useExportExcelMutation();
+    const [exportExcel] = useExportExcelMutation();
 
     const handleExport = async () => {
         try {

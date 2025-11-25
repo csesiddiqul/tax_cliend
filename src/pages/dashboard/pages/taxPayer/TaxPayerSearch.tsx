@@ -24,10 +24,28 @@ const TaxPayerSearch: React.FC<CreateProps> = ({ show, handleClose }) => {
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false); // Edit mode state
 
+  const [selectedId, setSelectedId] = useState("");
+
+
   const validationSchema = Yup.object({
     // HoldingNo: Yup.string().required("হোল্ডিং নং প্রযোজ্য !"),
     // OwnersName: Yup.string().required("করদাতার নাম প্রযোজ্য !"),
   });
+
+
+
+
+
+  const handleClickTaxPayerReport = () => {
+    if (selectedId) {
+      navigate(`/tax-payer-single-bill/${selectedId}`);
+    } else {
+      alert("Please select a taxpayer ID first!");
+    }
+  };
+
+
+
 
   const [getTaxPayerById, { data }] = useLazyGetTaxPayerClientByIdQuery();
   const [updateTaxPayer] = useUpdateTaxPayerMutation();
@@ -132,6 +150,7 @@ const TaxPayerSearch: React.FC<CreateProps> = ({ show, handleClose }) => {
                   setFieldValue={(field, value) => {
                     formik.setFieldValue(field, value);
                     if (value) getTaxPayerById(value);
+                    setSelectedId(value);
                   }}
                 />
               </Col>
@@ -445,7 +464,7 @@ const TaxPayerSearch: React.FC<CreateProps> = ({ show, handleClose }) => {
             )}
 
             <div className="d-flex gap-2">
-              <Button className="text-white" variant="info">
+              <Button className="text-white" variant="info" onClick={handleClickTaxPayerReport}>
                 Single Bill
               </Button>
               <Button variant="primary">View</Button>

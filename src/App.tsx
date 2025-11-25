@@ -58,9 +58,13 @@ import Tables from "bootstrap-components/Tables";
 import PublicRoute from "pages/auth/PublicRoute";
 import ProtectedRoute from "pages/auth/ProtectedRoute";
 import UserProtectedRoute from "pages/auth/UserProtectedRoute";
-import BillGenerationPage from "pages/dashboard/pages/billGeneration/BillGenerationPage";
 import ClientOtpSubmit from "pages/client/ClientOtpSubmit";
 import OtherAccountTables from "bootstrap-components/OtherAccountTables";
+import General from "pages/dashboard/pages/billGeneration/General";
+import Govt from "pages/dashboard/pages/billGeneration/Govt";
+import Single from "pages/dashboard/pages/billGeneration/Single";
+import TaxBill from "pages/dashboard/pages/reports/reports/TaxBill";
+import TaxBillUser from "pages/dashboard/pages/user_panel/TaxBillUser";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -90,20 +94,84 @@ const App = () => {
             />
           )
         },
+
+
         {
           id: "bill-generation",
           path: "/bill-generation",
           children: [
             {
-              path: "index",
-              element: <ProtectedRoute
-                element={<BillGenerationPage />}
-                requiredPermissions={['dashboard']}
-              />
+              path: "general",
+              element: (
+                <ProtectedRoute
+                  element={
+                    <General
+                      show={true}
+                      handleClose={() => window.history.back()} // back এলে modal close হবে
+                    />
+                  }
+                  requiredPermissions={["dashboard"]}
+                />
+              ),
             },
+            {
+              path: "govt",
+              element: (
+                <ProtectedRoute
+                  element={
+                    <Govt
+                      show={true}
+                      handleClose={() => window.history.back()} // back এলে modal close হবে
+                    />
+                  }
+                  requiredPermissions={["dashboard"]}
+                />
+              ),
+            },
+            {
+              path: "single",
+              element: (
+                <ProtectedRoute
+                  element={
+                    <Single
+                      show={true}
+                      handleClose={() => window.history.back()} // back এলে modal close হবে
+                    />
+                  }
+                  requiredPermissions={["dashboard"]}
+                />
+              ),
+
+
+            },
+
+
 
           ],
         },
+
+
+        {
+          id: "taxpayer-single-bill",
+          path: "/tax-payer-single-bill/:id",
+          children: [
+            {
+              path: "",
+              element: (
+                <ProtectedRoute
+                  element={
+                    <TaxBill />
+                  }
+                  requiredPermissions={["dashboard"]}
+                />
+              ),
+            },
+          ],
+        },
+
+
+
+
         {
           id: "taxPayerSearch",
           path: "/taxPayer",
@@ -231,6 +299,20 @@ const App = () => {
           ],
         },
 
+        {
+          id: "tax-year",
+          path: "/tax-year",
+          children: [
+            {
+              path: "index",
+              element: <ProtectedRoute
+                element={<TaxRatesPage />}
+                requiredPermissions={['dashboard']}
+              />
+            },
+          ],
+        },
+
 
         {
           id: "pages",
@@ -241,6 +323,7 @@ const App = () => {
               path: "profile",
               Component: Profile,
             },
+
             {
               path: "settings",
               Component: Settings,
@@ -395,6 +478,33 @@ const App = () => {
             />
           )
         },
+
+
+
+        {
+          id: "user-single-bill-show",
+          path: "single-bill-show/:id",
+          element: (
+            <UserProtectedRoute
+              element={<TaxBillUser />}
+
+            />
+          )
+        },
+
+
+        // {
+        //   id: "single-bill-user",
+        //   path: "/single-bill-user/:id",
+        //   element: (
+        //     <UserProtectedRoute
+        //       element={<TaxBill />}
+
+        //     />
+        //   )
+        // },
+
+
         {
           id: "Tables",
           path: "tables",

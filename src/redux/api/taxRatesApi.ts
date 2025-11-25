@@ -117,6 +117,7 @@ export const taxRatesApi = createApi({
 export const {
     useGetTaxRatesQuery,
     useGetTaxRateByIdQuery,
+    useLazyGetTaxRateByIdQuery,
     useCreateTaxRateMutation,
     useUpdateTaxRateMutation,
     useDeleteTaxRateMutation,

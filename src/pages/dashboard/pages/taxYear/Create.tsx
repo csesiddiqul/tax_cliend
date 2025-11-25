@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
-import { useCreateBankAccountMutation } from "../../../../redux/api/bankAccountApi";
+import { useCreateTaxRateMutation } from "../../../../redux/api/taxRatesApi";
 
 interface CreateProps {
   show: boolean;
@@ -11,29 +11,31 @@ interface CreateProps {
 }
 
 const Create: React.FC<CreateProps> = ({ show, handleClose }) => {
-  const [createStreet, { isLoading }] = useCreateBankAccountMutation();
+  const [createStreet, { isLoading }] = useCreateTaxRateMutation();
 
   // Yup validation schema
   const validationSchema = Yup.object({
-    BankNo: Yup.string().required("Bank Account No is required"),
-    BankName: Yup.string().required("Bank Name is required"),
-    Branch: Yup.string().required("Bank Branch is required"),
-    AccountsNo: Yup.string().required("Accounts No is required"),
+    Id: Yup.number().required("কর আইডি প্রযোজ্য !"),
+    HoldingT: Yup.number().required("হোল্ডিং কর প্রযোজ্য !"),
+    ConservancyT: Yup.number().required("সংরক্ষণ রেইট প্রযোজ্য !"),
+    WaterT: Yup.number().required("পানি রেইট প্রযোজ্য !"),
+    LightT: Yup.number().required("বিদ্যুৎ রেইট প্রযোজ্য !"),
   });
 
   // Formik setup
   const formik = useFormik({
     initialValues: {
-      BankNo: "",
-      BankName: "",
-      Branch: "",
-      AccountsNo: "",
+      Id: "",
+      HoldingT: "",
+      ConservancyT: "",
+      WaterT: "",
+      LightT: "",
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting, setErrors, resetForm }) => {
       try {
         await createStreet(values).unwrap();
-        Swal.fire("Success!", "Bank Account created successfully!", "success");
+        Swal.fire("Success!", "created successfully!", "success");
         resetForm();
         handleClose();
       } catch (error: any) {
@@ -55,88 +57,107 @@ const Create: React.FC<CreateProps> = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Add Bank Information</Modal.Title>
+        <Modal.Title>Tax Rates </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate onSubmit={formik.handleSubmit}>
           <Row>
-            {/* Bank No */}
+            {/* Prop Type ID */}
             <Col md={6}>
               <Form.Group className="mb-3">
-                <Form.Label>Bank No</Form.Label>
+                <Form.Label>কর আইডি  </Form.Label>
                 <Form.Control
                   type="text"
-                  name="BankNo"
-                  placeholder="Enter Bank No"
-                  value={formik.values.BankNo}
+                  name="Id"
+                  placeholder=""
+                  value={formik.values.Id}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  isInvalid={!!formik.errors.BankNo && formik.touched.BankNo}
+                  isInvalid={!!formik.errors.Id && formik.touched.Id}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {formik.errors.BankNo}
+                  {formik.errors.Id}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
-            {/* Bank Name */}
+            {/* হোল্ডিং কর */}
             <Col md={6}>
               <Form.Group className="mb-3">
-                <Form.Label>Bank Name</Form.Label>
+                <Form.Label>হোল্ডিং কর</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="BankName"
-                  placeholder="Enter Bank Name"
-                  value={formik.values.BankName}
+                  type="number"
+                  name="HoldingT"
+                  placeholder=""
+                  value={formik.values.HoldingT}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  isInvalid={!!formik.errors.BankName && formik.touched.BankName}
+                  isInvalid={!!formik.errors.HoldingT && formik.touched.HoldingT}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {formik.errors.BankName}
+                  {formik.errors.HoldingT}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
-            {/* Branch */}
+            {/* সংরক্ষণ রেইট */}
             <Col md={6}>
               <Form.Group className="mb-3">
-                <Form.Label>Branch</Form.Label>
+                <Form.Label>সংরক্ষণ রেইট</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="Branch"
-                  placeholder="Enter Branch"
-                  value={formik.values.Branch}
+                  type="number"
+                  name="ConservancyT"
+                  placeholder=""
+                  value={formik.values.ConservancyT}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  isInvalid={!!formik.errors.Branch && formik.touched.Branch}
+                  isInvalid={!!formik.errors.ConservancyT && formik.touched.ConservancyT}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {formik.errors.Branch}
+                  {formik.errors.ConservancyT}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
 
-            {/* Accounts No */}
+            {/* পানি রেইট */}
             <Col md={6}>
               <Form.Group className="mb-3">
-                <Form.Label>Accounts No</Form.Label>
+                <Form.Label>পানি রেইট</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="AccountsNo"
-                  placeholder="Enter Accounts No"
-                  value={formik.values.AccountsNo}
+                  type="number"
+                  name="WaterT"
+                  placeholder=""
+                  value={formik.values.WaterT}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  isInvalid={
-                    !!formik.errors.AccountsNo && formik.touched.AccountsNo
-                  }
+                  isInvalid={!!formik.errors.WaterT && formik.touched.WaterT}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {formik.errors.AccountsNo}
+                  {formik.errors.WaterT}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
+            {/* বিদ্যুৎ রেইট */}
+            <Col md={6}>
+              <Form.Group className="mb-3">
+                <Form.Label>বিদ্যুৎ রেইট</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="LightT"
+                  placeholder=""
+                  value={formik.values.LightT}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  isInvalid={!!formik.errors.LightT && formik.touched.LightT}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formik.errors.LightT}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+            
+
           </Row>
 
           <div className="d-flex justify-content-end gap-2">
@@ -157,7 +178,7 @@ const Create: React.FC<CreateProps> = ({ show, handleClose }) => {
           </div>
         </Form>
       </Modal.Body>
-    </Modal>
+    </Modal >
   );
 };
 

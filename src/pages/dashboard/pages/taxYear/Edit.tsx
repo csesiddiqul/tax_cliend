@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { useUpdateBankAccountMutation } from "../../../../redux/api/bankAccountApi";
+import { useUpdateTaxRateMutation } from "../../../../redux/api/taxRatesApi";
 
 interface EditProps {
     show: boolean;
     handleClose: () => void;
-    bankAccount: any
+    TaxRate: any
     refetch: () => void;
 }
 
-const Edit: React.FC<EditProps> = ({ show, handleClose, bankAccount, refetch }) => {
+
+const Edit: React.FC<EditProps> = ({ show, handleClose, TaxRate, refetch }) => {
+
+    console.log(TaxRate);
+
     const [formDataState, setFormDataState] = useState<{ [key: string]: any }>({
-        BankName: "",
-        Branch: "",
-        AccountsNo: "",
+        Id: "",
+        HoldingT: "",
+        ConservancyT: "",
+        WaterT: "",
+        LightT: "",
     });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [updatebankAccount, { isLoading }] = useUpdateBankAccountMutation();
+    const [updateTaxRate, { isLoading }] = useUpdateTaxRateMutation();
 
     useEffect(() => {
-        if (bankAccount) {
+        if (TaxRate) {
             setFormDataState({
-                BankNo: bankAccount.BankNo?.toString() || "",
-                BankName: bankAccount.BankName || "",
-                Branch: bankAccount.Branch || "",
-                AccountsNo: bankAccount.AccountsNo || "",
+                Id: TaxRate.Id?.toString() || "",
+                HoldingT: TaxRate.HoldingT || "",
+                ConservancyT: TaxRate.ConservancyT || "",
+                WaterT: TaxRate.WaterT || "",
+                LightT: TaxRate.LightT || "",
             });
             setErrors({});
         }
-    }, [bankAccount]);
+    }, [TaxRate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -41,22 +48,22 @@ const Edit: React.FC<EditProps> = ({ show, handleClose, bankAccount, refetch }) 
     };
 
     const handleSubmit = async () => {
-        if (!bankAccount) return;
+        if (!TaxRate) return;
 
         const formData = new FormData();
         formData.append("_method", "put");
-        formData.append("BankNo", bankAccount.BankNo?.toString());
+        formData.append("Id", TaxRate.Id);
 
         Object.keys(formDataState).forEach((key) => {
             formData.append(key, formDataState[key]);
         });
 
         try {
-            const res: any = await updatebankAccount({ id: bankAccount.BankNo, data: formData }).unwrap();
+            const res: any = await updateTaxRate({ id: TaxRate.Id, data: formData }).unwrap();
             Swal.fire({
                 icon: "success",
                 title: "Updated",
-                text: res?.message || "Bank account updated successfully!",
+                text: res?.message || "updated successfully!",
             });
             refetch();
             handleClose();
@@ -80,36 +87,42 @@ const Edit: React.FC<EditProps> = ({ show, handleClose, bankAccount, refetch }) 
 
     // ফিল্ড লেবেল সুন্দরভাবে দেখানোর জন্য mapping
     const fieldLabels: { [key: string]: string } = {
-        BankName: "Bank Name",
-        Branch: "Branch Name",
-        AccountsNo: "Account Number",
+        Id: "কর আইডি",
+        HoldingT: "হোল্ডিং কর",
+        ConservancyT: "সংরক্ষণ রেইট",
+        WaterT: "পানি রেইট",
+        LightT: "বিদ্যুৎ রেইট",
     };
 
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Bank Information</Modal.Title>
+                <Modal.Title>Tax Payer Type</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    {Object.keys(fieldLabels).map((key) => (
-                        <Form.Group className="mb-3" controlId={key} key={key}>
-                            <Form.Label>{fieldLabels[key]}</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name={key}
-                                value={formDataState[key] || ""}
-                                onChange={handleChange}
-                                isInvalid={!!errors[key]}
-                                placeholder={`Enter ${fieldLabels[key]}`}
-                            />
-                            {errors[key] && (
-                                <Form.Control.Feedback type="invalid">
-                                    {errors[key]}
-                                </Form.Control.Feedback>
-                            )}
-                        </Form.Group>
-                    ))}
+                    <Row>
+                        {Object.keys(fieldLabels).map((key) => (
+                            <Col md={6} key={key}>
+                                <Form.Group className="mb-3" controlId={key}>
+                                    <Form.Label>{fieldLabels[key]}</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name={key}
+                                        value={formDataState[key] || ""}
+                                        onChange={handleChange}
+                                        isInvalid={!!errors[key]}
+                                        placeholder={`${fieldLabels[key]}`}
+                                    />
+                                    {errors[key] && (
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors[key]}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            </Col>
+                        ))}
+                    </Row>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

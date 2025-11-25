@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 const ClientSignIn = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { roles, status, token } = useSelector((state: RootState) => state.auth);
+  const { status, token } = useSelector((state: RootState) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
   const [ClientNo, setClientNo] = useState("");

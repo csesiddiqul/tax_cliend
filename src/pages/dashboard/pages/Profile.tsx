@@ -1,9 +1,6 @@
 // import node module libraries
 import { Row, Container } from "react-bootstrap";
 
-// import widget as custom components
-import { PageHeading } from "widgets";
-
 // import sub components
 import {
   AboutMe,
